@@ -69,3 +69,24 @@ This stage starts with a new base image (`node:18.13.0-slim`) and is intended fo
     - `CMD [ "node", "./dist/main.js" ]`: Specifies the command to start the Node.js application when the container is run. It runs `node` on the `main.js` file located in the `/app/dist` directory.
 
 This Dockerfile separates the build environment from the production environment, optimizes the Docker image size, and sets up the application for production use.
+
+# Node.js Application Dockerization with Multi-Stage Build
+
+This Dockerfile is designed to containerize a Node.js application using multi-stage builds. It separates the build environment from the production environment to optimize the image size and prepare the application for production use.
+
+## Stage 1: Base (Build)
+
+- **Base Image Selection**: Uses Node.js version 18.13.0 as the base image and sets the working directory to `/app`.
+
+- **Dependency Installation**: Copies `package.json` and `package-lock.json`, installs dependencies, sets up Prisma, copies the codebase, and builds the application.
+
+## Stage 2: Production (Runtime)
+
+- Defines build-time variables for the user and group, includes a temporary workaround for running Prisma, and sets up the production environment.
+
+- Copies artifacts from the build stage, changes ownership, installs production dependencies, and sets the user to a non-privileged user.
+
+- Exposes port 3000 and specifies the command to start the application.
+
+This Dockerfile simplifies the deployment of your Node.js application and ensures a clean separation between development and production environments.
+
